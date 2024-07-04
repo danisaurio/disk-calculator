@@ -1,0 +1,8 @@
+{
+  "short_name": "Walletsaurio",
+  "name": "disk-calculator",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#6d1b7b",
+  "background_color": "#6d1b7b"
+}
