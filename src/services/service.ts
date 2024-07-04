@@ -1,13 +1,31 @@
-import { addDoc, collection } from "firebase/firestore";
-import { initializeDb } from "./firebase";
-import { Movement, NewPR } from "./firebase-types";
+import { Timestamp, addDoc, collection, doc, getDocs, serverTimestamp, setDoc } from "firebase/firestore";
+import { initializeAuth, initializeDb } from "./firebase";
+import { MovementRM, NewWeight } from "./firebase-types";
+import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
 const db = initializeDb();
+const auth = initializeAuth()
 
-export const addNewMovement = async ({ name }: Movement) => {
+export const login = async ({ email, password }: { email: string, password: string }): Promise<string | false> => {
+  let response;
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    response = await signInWithEmailAndPassword(auth, email, password);
+    return response.user.uid;
+  } catch (err) {
+    const error = err as { code: number, message: string };
+    console.error(`Error on sign in!: ${error.code}`);
+    console.error(error.message);
+    return false;
+  }
+};
+
+export const addNewRM = async ({ name, kgs }: MovementRM) => {
   try {
     const docRef = await addDoc(collection(db, "movements"), {
       name,
+      kgs,
+      date: serverTimestamp()
     });
     console.log("Movement written with ID: ", docRef.id);
   } catch (e) {
@@ -15,16 +33,24 @@ export const addNewMovement = async ({ name }: Movement) => {
   }
 }
 
-export const addNewRM = async ({ movementId, kgs }: NewPR) => {
-  const today = new Date()
-  try {
-    const docRef = await addDoc(collection(db, "rms"), {
-      movementId,
-      kgs,
-      date: today.toISOString()
-    });
-    console.log("rm written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding rm: ", e);
-  }
+export const getWeight = async () => {
+  const querySnapshot = await getDocs(collection(db, "weight"));
+  let result: { weight: string, date: string } = { weight: '', date: '' }
+  querySnapshot.forEach((doc) => {
+    const acc = doc.data()
+    const date = new Timestamp(acc.date.seconds, acc.date.nanoseconds);
+    result = {
+      weight: acc.weight,
+      date: date.toDate().toDateString()
+    }
+  });
+  return result
+}
+
+export const updateWeight = async ({ kgs }: NewWeight) => {
+  const frankDocRef = doc(db, "weight", "weight-collection-id");
+  await setDoc(frankDocRef, {
+    weight: kgs,
+    date: serverTimestamp()
+  });
 }
