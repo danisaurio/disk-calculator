@@ -33,6 +33,22 @@ export const addNewRM = async ({ name, kgs }: MovementRM) => {
   }
 }
 
+export const getAllRMs = async () => {
+  const querySnapshot = await getDocs(collection(db, "movements"));
+  const result: Record<string, { kgs: string, date: string }[]> = {}
+
+  querySnapshot.forEach((doc) => {
+    const acc = doc.data()
+    const rms: [{ kgs: string, date: { seconds: number, nanoseconds: number } }] = acc.rms
+    rms.sort((a, b) => (a.date > b.date ? 1 : ((b.date > a.date) ? -1 : 0)))
+    result[acc.name] = rms.map((rm: { kgs: string, date: { seconds: number, nanoseconds: number } }) => {
+      const date = new Timestamp(rm.date.seconds, rm.date.nanoseconds);
+      return { kgs: rm.kgs, date: date.toDate().toDateString() }
+    })
+  });
+  return result
+}
+
 export const getWeight = async () => {
   const querySnapshot = await getDocs(collection(db, "weight"));
   let result: { weight: string, date: string } = { weight: '', date: '' }
