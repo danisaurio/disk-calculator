@@ -9,3 +9,4 @@ export type WeightFirebaseResponse = { weight: string, date: FirebaseTimestamp }
 export type MovementRMWithDateString = { kgs: string; date: string; }
 export type AllRMs = Record<string, MovementRMWithDateString[]>
 export type WeightWithDateString = { weight: string, date: string }
+export type SelectedMovementRM = { name: string, kgs: string, date: string }
