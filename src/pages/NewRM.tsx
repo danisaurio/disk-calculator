@@ -13,7 +13,6 @@ const NewRM = () => {
 
   const handleAddWeight = async() => {
     setLoading(true)
-    console.log(selectedMovement)
     if (weight && selectedMovement){
       await addNewRM({kgs: weight, movement: selectedMovement})
       setOpenSnackBar(true)
