@@ -190,7 +190,9 @@ export default function MiniDrawer() {
                     justifyContent: 'center',
                   }}
                 >
-                  {icon}
+                  <div style={{color: selectedPage === value ?  theme.palette.primary.main : undefined}}>
+                    {icon}
+                  </div>
                 </ListItemIcon>
                 <ListItemText primary={name} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
