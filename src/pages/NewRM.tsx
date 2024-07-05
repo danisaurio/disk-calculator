@@ -10,7 +10,7 @@ const NewRM = () => {
   const [weight, setWeight]=useState<string>('');
   const [loading, setLoading]=useState<boolean>(false);
   const [openSnackBar, setOpenSnackBar]=useState<boolean>(false);
-console.log(selectedMovement)
+
   const handleAddWeight = async() => {
     setLoading(true)
     console.log(selectedMovement)
