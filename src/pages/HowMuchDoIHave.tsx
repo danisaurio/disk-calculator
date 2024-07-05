@@ -54,7 +54,7 @@ const HowMuchDoIHave = () => {
     <div>And my barbell is:</div>
     <Stack direction={'row'} spacing={2}>
       <FormControl fullWidth>
-        <InputLabel id="barbell-select-label">Metric</InputLabel>
+        <InputLabel id="barbell-select-label">Barbell</InputLabel>
         <Select
           labelId="barbell-select-label"
           id="barbell-select"

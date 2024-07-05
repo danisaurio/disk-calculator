@@ -59,7 +59,7 @@ const NewRM = () => {
       <Stack direction={'column'} spacing={2}>
         {
           addNew ? (
-              <TextField id="new-rm" type="number" label="Enter new RM" variant="outlined" value={weight} onChange={(w)=>setSelectedNewMovement(w.currentTarget.value)} color="secondary" />
+              <TextField id="new-rm" label="Enter new RM" variant="outlined" value={weight} onChange={(w)=>setSelectedNewMovement(w.currentTarget.value)} color="secondary" />
           ) : (
             <FormControl fullWidth>
             <Autocomplete
@@ -82,7 +82,7 @@ const NewRM = () => {
       </Stack>
       <Stack direction={'column'} spacing={2}>
         <TextField id="new-rm-kgs" type="number" label="Enter new weight (kgs)" variant="outlined" value={weight} onChange={(w)=>setWeight(w.currentTarget.value)} color="secondary" />
-        <Button onClick={handleAddWeight} variant="contained">Submit</Button>
+        <Button onClick={handleAddWeight} disabled={loading || weight === '' || (addNew ? !selectedNewMovement : !selectedMovement)} variant="contained">Submit</Button>
       </Stack>
       <SuccessSnackbar open={openSnackBar} handleClose={() => setOpenSnackBar(false)}/>
     </Stack>

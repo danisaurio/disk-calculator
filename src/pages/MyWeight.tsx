@@ -36,7 +36,7 @@ const MyWeight = () => {
     <Stack direction={'column'} spacing={2}>
       <div>Current Weight: <span style={{fontWeight: 'bold'}}>{oldWeight?.weight} kgs</span> ({oldWeight?.date})</div>
       <TextField id="outlined-basic" type="number" label="Enter new weight" variant="outlined" value={weight} onChange={(w)=>setWeight(w.currentTarget.value)} color="secondary" />
-      <Button onClick={handleAddWeight} variant={'contained'} disabled={loading || weight===''}>Submit</Button>\
+      <Button onClick={handleAddWeight} variant={'contained'} disabled={loading || weight===''}>Submit</Button>
       <SuccessSnackbar open={openSnackBar} handleClose={() => setOpenSnackBar(false)}/>
     </Stack>
   )

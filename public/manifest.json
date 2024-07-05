@@ -2,7 +2,7 @@
   "short_name": "disk-calculator",
   "name": "disk-calculator",
   "start_url": ".",
-  "display": "standalone",
+  "display": "fullscreen",
   "theme_color": "#6d1b7b",
   "background_color": "#6d1b7b"
 }
