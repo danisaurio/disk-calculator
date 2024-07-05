@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { getAllRMs } from "../services/service"
 import { FormControl, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, styled } from "@mui/material"
 import { kgsToPounds } from "../utils";
+import { AllRMs, SelectedMovementRM } from "../services/firebase-types";
+import Loading from "../components/Loading";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -18,8 +20,9 @@ const HeaderItem = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: 'white',
 }));
+type PercentageData = {percentageData: {percentage: number, lbsBySide: string, kgsBySide: string}}
 
-const PercentageRow = ({percentageData}: {percentageData: {percentage: number, lbsBySide: string, kgsBySide: string}}) =>{
+const PercentageRow = ({percentageData}: PercentageData) =>{
   return(
   <>
     <Grid item xs={3}>
@@ -36,8 +39,8 @@ const PercentageRow = ({percentageData}: {percentageData: {percentage: number, l
 }
 
 const HowMuchToPut = () => {
-  const [allMovements, setAllMovements] = useState<Record<string, { kgs: string; date: string; }[]>>()
-  const [selectedMovement, setSelectedMovement] = useState<{name: string, rm: string, date: string}>()
+  const [allMovements, setAllMovements] = useState<AllRMs>()
+  const [selectedMovement, setSelectedMovement] = useState<SelectedMovementRM>()
   const [barbell, setBarbell] = useState(15);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const HowMuchToPut = () => {
 
   const getPercentages = () =>{
     let max = 100
-    const weight = parseFloat(selectedMovement?.rm || '')
+    const weight = parseFloat(selectedMovement?.kgs || '')
     const weightInPounds = kgsToPounds(weight);
     const barbelInPounds = kgsToPounds(barbell)
     const acc: {percentage: number, lbsBySide: string, kgsBySide: string}[] = []
@@ -62,23 +65,26 @@ const HowMuchToPut = () => {
     }
     return acc
   }
+
+  if(!allMovements){
+    return <Loading/>
+  }
   return (
     <Stack direction={'column'} spacing={2}>
       <Stack direction={'column'} spacing={2}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Select movement</InputLabel>
+          <InputLabel id="select-movement-input">Select movement</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="select-movement-input"
+            id="movement-select"
             value={selectedMovement?.name || ''}
-            label="Age"
+            label="Select movement"
             onChange={(event: SelectChangeEvent) => {
               if(allMovements){
                 const movementInfo = allMovements[event.target.value as string]
                 setSelectedMovement({
                   name: event.target.value,
-                  rm: movementInfo[movementInfo.length-1].kgs,
-                  date: movementInfo[movementInfo.length-1].date,
+                  ...movementInfo[movementInfo.length-1]
                 });
               }
             }}
@@ -90,17 +96,17 @@ const HowMuchToPut = () => {
         </FormControl>
         {
           selectedMovement && (
-            <div>Current RM: {selectedMovement.rm}kgs ({selectedMovement.date})</div>
+            <div>Current RM: <span style={{fontWeight:'bold'}}>{selectedMovement.kgs}kgs</span> ({selectedMovement.date})</div>
           )
         }
       </Stack>
       <div>And my barbell is:</div>
       <Stack direction={'row'} spacing={2}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Metric</InputLabel>
+          <InputLabel id="metric-select-label">Metric</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="metric-select-label"
+            id="metric-select"
             value={barbell.toString()}
             label="Age"
             onChange={(event: SelectChangeEvent) => {

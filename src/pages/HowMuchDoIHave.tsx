@@ -34,12 +34,12 @@ const HowMuchDoIHave = () => {
   <Stack direction={'column'} spacing={2}>
     <div>On each side I have:</div>
     <Stack direction={'row'} spacing={2}>
-      <TextField id="outlined-basic" type="number" label="Enter weight" variant="outlined" value={weight} onChange={(w)=>setWeight(w.currentTarget.value)} color="secondary" />
+      <TextField id="weight-input" type="number" label="Enter weight" variant="outlined" value={weight} onChange={(w)=>setWeight(w.currentTarget.value)} color="secondary" />
       <FormControl>
-        <InputLabel id="demo-simple-select-label">Metric</InputLabel>
+        <InputLabel id="metric-select-label">Metric</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="metric-select-label"
+          id="metric-select"
           value={metric}
           label="Age"
           onChange={(event: SelectChangeEvent) => {
@@ -54,12 +54,11 @@ const HowMuchDoIHave = () => {
     <div>And my barbell is:</div>
     <Stack direction={'row'} spacing={2}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Metric</InputLabel>
+        <InputLabel id="barbell-select-label">Metric</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="barbell-select-label"
+          id="barbell-select"
           value={barbell}
-          label="Age"
           onChange={(event: SelectChangeEvent) => {
             setBarbell(event.target.value as string);
           }}
