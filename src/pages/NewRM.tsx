@@ -15,7 +15,7 @@ console.log(selectedMovement)
     setLoading(true)
     console.log(selectedMovement)
     if (weight && selectedMovement){
-      // await addNewRM({kgs: weight, movement: selectedMovement})
+      await addNewRM({kgs: weight, movement: selectedMovement})
       setOpenSnackBar(true)
     }
     setSelectedMovement(undefined)
@@ -58,7 +58,6 @@ console.log(selectedMovement)
             freeSolo
           />
         </FormControl>
-
         {
           selectedMovement && allMovements[selectedMovement] && (
             <div style={{textAlign:'right'}}>Current {selectedMovement} RM: <span style={{fontWeight:'bold'}}>{allMovements[selectedMovement][allMovements[selectedMovement].length-1].kgs}kgs</span> <br/>({allMovements[selectedMovement][allMovements[selectedMovement].length-1].date})</div>
