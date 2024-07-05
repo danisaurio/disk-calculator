@@ -14,7 +14,7 @@ const MovementRow = ({name, rms, myWeight}: {name: string, rms: MovementRMWithDa
         const PBW = ((parseFloat(kgs)*100)/parseFloat(myWeight)).toFixed(1)
         return (
           <Grid container key={index}>
-            <Grid item xs={5}>
+            <Grid item xs={6}>
               {date}
             </Grid>
             <Grid item xs={3} style={{fontWeight: isLastRM ? 'bold': 'normal'}}>

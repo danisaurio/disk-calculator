@@ -16,6 +16,19 @@ export const addNewRM = async ({ movement, kgs }: MovementRMRequest) => {
   }
 }
 
+export const createNewRMDoc = async ({ movement, kgs }: MovementRMRequest) => {
+  try {
+    const docRef = doc(db, "movements", movement);
+    await setDoc(docRef, {
+      name: movement,
+      rms: arrayUnion({ kgs, date: new Date() })
+    });
+    console.log("Movement written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding movement: ", e);
+  }
+}
+
 export const getAllRMs = async (): Promise<AllRMs> => {
   const querySnapshot = await getDocs(collection(db, "movements"));
   const result: AllRMs = {}

@@ -1,5 +1,5 @@
 import { useState, useEffect, SyntheticEvent } from "react";
-import { addNewRM, getAllRMs } from "../services/service";
+import { addNewRM, createNewRMDoc, getAllRMs } from "../services/service";
 import { Stack, FormControl, Button, TextField, Autocomplete } from "@mui/material";
 import Loading from "../components/Loading";
 import SuccessSnackbar from "../components/Snackbar";
@@ -14,7 +14,11 @@ const NewRM = () => {
   const handleAddWeight = async() => {
     setLoading(true)
     if (weight && selectedMovement){
-      await addNewRM({kgs: weight, movement: selectedMovement})
+      if(allMovements && allMovements[selectedMovement]){
+        await addNewRM({kgs: weight, movement: selectedMovement})
+      } else  {
+        await createNewRMDoc({kgs: weight, movement: selectedMovement})
+      }
       setOpenSnackBar(true)
     }
     setSelectedMovement(undefined)
@@ -31,7 +35,6 @@ const NewRM = () => {
   }, [])
 
   const handleAutocomplete = (_event: SyntheticEvent<Element, Event>, value: string | null) => {
-    console.log({_event, value})
     if(value){
       setSelectedMovement(value);
     }
