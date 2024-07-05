@@ -6,25 +6,19 @@ import SuccessSnackbar from "../components/Snackbar";
 
 const NewRM = () => {
   const [allMovements, setAllMovements] = useState<Record<string, { kgs: string; date: string; }[]>>()
-  const [selectedMovement, setSelectedMovement] = useState<{name: string, rm: string, date: string}>()
-  const [selectedNewMovement, setSelectedNewMovement] = useState<string>()
+  const [selectedMovement, setSelectedMovement] = useState<string>()
   const [weight, setWeight]=useState<string>('');
-  const [addNew, setAddNew]=useState<boolean>(false);
   const [loading, setLoading]=useState<boolean>(false);
   const [openSnackBar, setOpenSnackBar]=useState<boolean>(false);
-
+console.log(selectedMovement)
   const handleAddWeight = async() => {
     setLoading(true)
-    if(addNew && selectedNewMovement){
-      await addNewRM({kgs: weight, movement: selectedNewMovement})
+    console.log(selectedMovement)
+    if (weight && selectedMovement){
+      // await addNewRM({kgs: weight, movement: selectedMovement})
       setOpenSnackBar(true)
-      setSelectedNewMovement(undefined)
-    } else if (weight && selectedMovement){
-      await addNewRM({kgs: weight, movement: selectedMovement.name})
-      setOpenSnackBar(true)
-      setSelectedMovement(undefined)
     }
-    setAddNew(false)
+    setSelectedMovement(undefined)
     setWeight('')
     setLoading(false)
   }
@@ -38,13 +32,9 @@ const NewRM = () => {
   }, [])
 
   const handleAutocomplete = (_event: SyntheticEvent<Element, Event>, value: string | null) => {
-    if(allMovements && value){
-      const movementInfo = allMovements[value]
-      setSelectedMovement({
-        name: value,
-        rm: movementInfo[movementInfo.length-1].kgs,
-        date: movementInfo[movementInfo.length-1].date,
-      });
+    console.log({_event, value})
+    if(value){
+      setSelectedMovement(value);
     }
   }
 
@@ -57,32 +47,27 @@ const NewRM = () => {
   return (
     <Stack direction={'column'} spacing={2}>
       <Stack direction={'column'} spacing={2}>
-        {
-          addNew ? (
-              <TextField id="new-rm" label="Enter new RM" variant="outlined" value={weight} onChange={(w)=>setSelectedNewMovement(w.currentTarget.value)} color="secondary" />
-          ) : (
-            <FormControl fullWidth>
-            <Autocomplete
-              id="new-rm-autocomplete"
-              options={allMovements ? Object.keys(allMovements) : []}
-              value={selectedMovement?.name ?? null}
-              renderInput={(params) => <TextField {...params} label="New RM" />}
-              onChange={handleAutocomplete}
-            />
-          </FormControl>
-          )
-        }
-        <Button onClick={()=> setAddNew(!addNew)} style={{justifyContent: 'right'}}>{addNew ? 'Add existing' : 'Add New?'}</Button>
+        <FormControl fullWidth>
+          <Autocomplete
+            id="new-rm-autocomplete"
+            options={allMovements ? Object.keys(allMovements) : []}
+            value={selectedMovement ?? null}
+            renderInput={(params) => <TextField {...params} label="New RM" />}
+            onChange={handleAutocomplete}
+            autoSelect
+            freeSolo
+          />
+        </FormControl>
 
         {
-          selectedMovement && (
-            <div style={{textAlign:'right'}}>Current {selectedMovement.name} RM: <span style={{fontWeight:'bold'}}>{selectedMovement.rm}kgs</span> <br/>({selectedMovement.date})</div>
+          selectedMovement && allMovements[selectedMovement] && (
+            <div style={{textAlign:'right'}}>Current {selectedMovement} RM: <span style={{fontWeight:'bold'}}>{allMovements[selectedMovement][allMovements[selectedMovement].length-1].kgs}kgs</span> <br/>({allMovements[selectedMovement][allMovements[selectedMovement].length-1].date})</div>
           )
         }
       </Stack>
       <Stack direction={'column'} spacing={2}>
         <TextField id="new-rm-kgs" type="number" label="Enter new weight (kgs)" variant="outlined" value={weight} onChange={(w)=>setWeight(w.currentTarget.value)} color="secondary" />
-        <Button onClick={handleAddWeight} disabled={loading || weight === '' || (addNew ? !selectedNewMovement : !selectedMovement)} variant="contained">Submit</Button>
+        <Button onClick={handleAddWeight} disabled={loading || weight === '' ||  !selectedMovement} variant="contained">Submit</Button>
       </Stack>
       <SuccessSnackbar open={openSnackBar} handleClose={() => setOpenSnackBar(false)}/>
     </Stack>
