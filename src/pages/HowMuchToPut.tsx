@@ -103,7 +103,7 @@ const HowMuchToPut = () => {
       <div>And my barbell is:</div>
       <Stack direction={'row'} spacing={2}>
         <FormControl fullWidth>
-          <InputLabel id="metric-select-label">Metric</InputLabel>
+          <InputLabel id="metric-select-label">Barbell</InputLabel>
           <Select
             labelId="metric-select-label"
             id="metric-select"
