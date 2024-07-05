@@ -6,9 +6,13 @@ const NewRM = () => {
   const [allMovements, setAllMovements] = useState<Record<string, { kgs: string; date: string; }[]>>()
   const [selectedMovement, setSelectedMovement] = useState<{name: string, rm: string, date: string}>()
   const [weight, setWeight]=useState<string>('');
+  const [addNew, setAddNew]=useState<boolean>(false);
+  const [selectedNewMovement, setSelectedNewMovement] = useState<string>()
 
   const handleAddWeight = async() => {
-    if(weight && selectedMovement){
+    if(addNew && selectedNewMovement){
+      await addNewRM({kgs: weight, movement: selectedNewMovement})
+    } else if (weight && selectedMovement){
       await addNewRM({kgs: weight, movement: selectedMovement.name})
     }
   }
@@ -34,15 +38,23 @@ const NewRM = () => {
   return (
     <Stack direction={'column'} spacing={2}>
     <Stack direction={'column'} spacing={2}>
-      <FormControl fullWidth>
-        <Autocomplete
-          id="demo-simple-select"
-          options={allMovements ? Object.keys(allMovements) : []}
-          value={selectedMovement?.name ?? null}
-          renderInput={(params) => <TextField {...params} label="New RM" />}
-          onChange={handleAutocomplete}
-        />
-      </FormControl>
+      {
+        addNew ? (
+            <TextField id="outlined-basic" type="number" label="Enter new weight" variant="outlined" value={weight} onChange={(w)=>setSelectedNewMovement(w.currentTarget.value)} color="secondary" />
+        ) : (
+          <FormControl fullWidth>
+          <Autocomplete
+            id="demo-simple-select"
+            options={allMovements ? Object.keys(allMovements) : []}
+            value={selectedMovement?.name ?? null}
+            renderInput={(params) => <TextField {...params} label="New RM" />}
+            onChange={handleAutocomplete}
+          />
+        </FormControl>
+        )
+      }
+      <Button onClick={()=> setAddNew(!addNew)}>{addNew ? 'Add existing' : 'Add New?'}</Button>
+
       {
         selectedMovement && (
           <div>Current RM: {selectedMovement.rm}kgs ({selectedMovement.date})</div>
