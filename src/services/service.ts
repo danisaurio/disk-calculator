@@ -1,4 +1,4 @@
-import { Timestamp, addDoc, collection, doc, getDocs, serverTimestamp, setDoc } from "firebase/firestore";
+import { Timestamp, arrayUnion, collection, doc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { initializeAuth, initializeDb } from "./firebase";
 import { MovementRM, NewWeight } from "./firebase-types";
 import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
@@ -20,12 +20,11 @@ export const login = async ({ email, password }: { email: string, password: stri
   }
 };
 
-export const addNewRM = async ({ name, kgs }: MovementRM) => {
+export const addNewRM = async ({ movement, kgs }: MovementRM) => {
   try {
-    const docRef = await addDoc(collection(db, "movements"), {
-      name,
-      kgs,
-      date: serverTimestamp()
+    const docRef = doc(db, "movements", movement);
+    await updateDoc(docRef, {
+      rms: arrayUnion({ kgs, date: new Date() })
     });
     console.log("Movement written with ID: ", docRef.id);
   } catch (e) {
