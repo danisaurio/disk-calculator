@@ -1,6 +1,7 @@
 import { Stack, TextField, Select, FormControl, InputLabel, MenuItem, SelectChangeEvent } from "@mui/material"
 import { useState } from "react"
 import { kgsToPounds, poundsToKgs } from "../utils";
+import PRPercentageCalculator from "../components/PRPercentageCalculator";
 
 const HowMuchDoIHave = () => {
   const [weight, setWeight] = useState('');
@@ -76,6 +77,7 @@ const HowMuchDoIHave = () => {
             <div>{(getPlatesWeight().kgs + getBarbellWeight().kgs).toFixed(2)} kgs</div>
             <div>{(getPlatesWeight().lbs + getBarbellWeight().lbs).toFixed(2)} Lbs</div>
           </Stack>
+          <PRPercentageCalculator weight={(getPlatesWeight().kgs + getBarbellWeight().kgs).toFixed(2)} />
         </Stack>
       )
     }
