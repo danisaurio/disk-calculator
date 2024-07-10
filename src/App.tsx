@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -26,6 +25,9 @@ import HowMuchToPut from './pages/HowMuchToPut';
 import MyRMs from './pages/MyRMs';
 import NewRM from './pages/NewRM';
 import MyWeight from './pages/MyWeight';
+import { initializeAuth, onAuthStateChange } from './services/firebase';
+import { useState, useEffect } from 'react';
+import Login from './pages/Login';
 
 const drawerWidth = 240;
 const menuOptions = [
@@ -130,18 +132,18 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+export default function App() {
   const theme = useTheme();
-  const [selectedPage, setSelectedPage] = React.useState('have');
-  const [open, setOpen] = React.useState(false);
+  const [selectedPage, setSelectedPage] = useState('have');
+  const [open, setOpen] = useState(false);
+  
+  const auth = initializeAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => onAuthStateChange({ callback: setIsAuthenticated, auth }), [auth]);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  if(!isAuthenticated){
+    return <Login/>
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -151,7 +153,7 @@ export default function MiniDrawer() {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={()=>setOpen(true)}
             edge="start"
             sx={{
               marginRight: 5,
@@ -167,7 +169,7 @@ export default function MiniDrawer() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={()=>setOpen(false)}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
