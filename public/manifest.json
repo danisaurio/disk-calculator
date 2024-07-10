@@ -1,7 +1,7 @@
 {
   "short_name": "disk-calculator",
   "name": "disk-calculator",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#6d1b7b",
   "background_color": "#6d1b7b",
@@ -17,36 +17,6 @@
       "type": "image/png",
       "sizes": "144x144",
       "purpose": "any"
-    },
-    {
-      "src": "src/icons/disk-calculator.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "src/icons/disk-calculator.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
-    },
-    {
-      "src": "src/icons/disk-calculator.png",
-      "type": "image/png",
-      "sizes": "32x32",
-      "purpose": "maskable"
-    },
-    {
-      "src": "src/icons/disk-calculator.png",
-      "type": "image/png",
-      "sizes": "16x16",
-      "purpose": "maskable"
-    },
-    {
-      "src": "src/icons/disk-calculator.png",
-      "type": "image/png",
-      "sizes": "180x180",
-      "purpose": "maskable"
     }
   ]
 }
