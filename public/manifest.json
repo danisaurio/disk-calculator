@@ -5,7 +5,6 @@
   "display": "standalone",
   "theme_color": "#6d1b7b",
   "background_color": "#6d1b7b",
-  "viewport-fit": "cover",
   "icons": [
     {
       "src": "src/icons/disk-calculator.ico",
