@@ -1,8 +1,25 @@
 import { Timestamp, arrayUnion, collection, doc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
-import { initializeDb } from "./firebase";
+import { initializeAuth, initializeDb } from "./firebase";
 import { AllRMs, MovementFirebaseResponse, MovementRMRequest, NewWeightRequest, WeightFirebaseResponse, WeightWithDateString } from "./firebase-types";
+import { setPersistence, browserLocalPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
 const db = initializeDb();
+const auth = initializeAuth();
+
+export const login = async ({ email, password }: { email: string, password: string }): Promise<string | false> => {
+  console.log({ email, password })
+  let response;
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    response = await signInWithEmailAndPassword(auth, email, password);
+    return response.user.uid;
+  } catch (err) {
+    const error = err as { code: number, message: string };
+    console.error(`Error on sign in!: ${error.code}`);
+    console.error(error.message);
+    return false;
+  }
+};
 
 export const addNewRM = async ({ movement, kgs }: MovementRMRequest) => {
   try {

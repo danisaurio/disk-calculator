@@ -1,13 +1,14 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { Auth, getAuth } from "firebase/auth";
+import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-import { getFirestore, Firestore } from "firebase/firestore";
+import { getFirestore, Firestore, Unsubscribe } from "firebase/firestore";
+import { SetStateAction } from "react";
 
 const initializeFirebase = (): FirebaseApp => {
   const firebaseConfig = {
@@ -31,3 +32,14 @@ export const initializeDb = (): Firestore => {
 };
 
 export const initializeAuth = (): Auth => getAuth();
+
+type onAuthStateChangeProps = {
+  callback: React.Dispatch<SetStateAction<boolean>>
+  auth: Auth,
+}
+
+export function onAuthStateChange({ callback, auth }: onAuthStateChangeProps): Unsubscribe {
+  return onAuthStateChanged(auth, ((user) => {
+    callback(!!user);
+  }));
+}
