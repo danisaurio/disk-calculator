@@ -51,6 +51,16 @@ const HowMuchDoIHave = () => {
           <MenuItem value={'lbs'}>lbs</MenuItem>
         </Select>
       </FormControl>
+      {
+        weight !== '' && (
+          <Stack direction={'column'} spacing={2} fontWeight={900}>
+            <Stack>
+              <div>{(getPlatesWeight().kgs/2).toFixed(2)} kgs</div>
+              <div>{(getPlatesWeight().lbs/2).toFixed(2)} lbs</div>
+            </Stack>
+          </Stack>
+        )
+      }
     </Stack>
     <div>And my barbell is:</div>
     <Stack direction={'row'} spacing={2}>
